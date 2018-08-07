@@ -1,7 +1,7 @@
 # from django.urls import reverse_lazy
 # from django.shortcuts import get_object_or_404
 # from django.utils.decorators import method_decorator
-from rest_framework.permissions import IsAdminUser, SAFE_METHODS
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.core.cache import caches
 from rest_framework import viewsets
 
@@ -23,12 +23,9 @@ class PlaceViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action not in SAFE_METHODS:
-            self.permission_classes += [IsAdminUser]
+        if self.action not in ['retrieve', 'popular']:
+            self.permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in self.permission_classes]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
 # class PlaceList(ListView):
 #     model = Place
