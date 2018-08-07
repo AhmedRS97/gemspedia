@@ -240,3 +240,12 @@ JWT_AUTH = {
 # stripe settings
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_0bzkiDjuJPLrDw1DXTi94Ys4")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_fjvaNIQFPMEg5dydiH1nd7ts")
+
+
+# CORS settings:
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST = [
+#
+# ]
