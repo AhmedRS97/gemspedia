@@ -34,7 +34,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action not in ['retrieve', 'popular']:
+        if self.action not in ['retrieve', 'list', 'popular']:
             self.permission_classes = [IsAuthenticated, IsAuthor]
         return [permission() for permission in self.permission_classes]
 
