@@ -39,6 +39,7 @@ class TravelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         imgs = validated_data.pop('images')
         vids = validated_data.pop('videos')
+        validated_data.pop('users')
         travel = Travel.objects.create(**validated_data)
         for img in imgs:
             TravelImage.objects.create(travel=travel, **img)

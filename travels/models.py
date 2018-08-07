@@ -11,7 +11,7 @@ from ckeditor.fields import RichTextField
 
 # Create your models here.
 class Travel(models.Model):
-    users = models.ManyToManyField(User, related_name='travels')
+    users = models.ManyToManyField(User, related_name='travels', blank=True)
     title = models.CharField(_('title'), max_length=255, db_index=True)
     description = RichTextField(max_length=1024)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, db_index=True)
