@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
-from celery.schedules import crontab
-from gemspedia.celery import app
+# from celery.schedules import crontab
+# from gemspedia.celery import app
 from celery import task
 
 from django.core.cache import caches
@@ -24,7 +24,10 @@ def task_cache_popular_articles():
     # get most viewed articles
     most_viewed = list(Article.objects.filter(id__in=article_ranking_ids))
     most_viewed.sort(key=lambda x: article_ranking_ids.index(x.id))
-    db_cache.set('popular_articles', most_viewed, None)
+    return db_cache.set(
+        'popular_articles', most_viewed,
+        None  # this's the expire time. setting it to None to make it permanent.
+    )
 
 
 @task()
@@ -34,7 +37,10 @@ def task_cache_popular_authors():
     # get most viewed articles
     most_viewed = list(User.objects.filter(id__in=author_ranking_ids))
     most_viewed.sort(key=lambda x: author_ranking_ids.index(x.id))
-    db_cache.set('popular_authors', most_viewed, None)
+    return db_cache.set(
+        'popular_authors', most_viewed,
+        None  # this's the expire time. setting it to None to make it permanent.
+    )
 
 
 # app.conf.beat_schedule = {

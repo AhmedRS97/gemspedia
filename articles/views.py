@@ -2,10 +2,12 @@
 # from django.shortcuts import get_object_or_404
 # from django.utils.decorators import method_decorator
 from django.template.defaultfilters import slugify
-from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from accounts.permissions import IsAuthor
 from django.core.cache import caches
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from django.conf import settings
 import redis
 
@@ -32,12 +34,26 @@ class ArticleViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action not in SAFE_METHODS:
-            self.permission_classes += [IsAuthor]
+        if self.action not in ['retrieve', 'popular']:
+            self.permission_classes = [IsAuthenticated, IsAuthor]
         return [permission() for permission in self.permission_classes]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        # increment Author ranking by 1
+        r.zincrby('author_ranking', instance.user.id, 1)
+        # increment article ranking by 1
+        r.zincrby('article_ranking', instance.id, 1)
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=False)
+    def popular(self, request):
+        serializer = self.get_serializer(db_cache.get('popular_articles'), many=True)
+        return Response(serializer.data)
 
 
 # class ArticleList(ListView):
