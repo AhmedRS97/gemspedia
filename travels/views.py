@@ -26,7 +26,7 @@ class TravelViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action not in ['retrieve']:
+        if self.action not in ['retrieve', 'list']:
             self.permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in self.permission_classes]
 
