@@ -28,7 +28,7 @@ class EventViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action not in ['retrieve', 'popular']:
+        if self.action not in ['retrieve', 'list', 'popular']:
             self.permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in self.permission_classes]
 
@@ -49,7 +49,8 @@ class EventViewSet(viewsets.ModelViewSet):
         elif event.price and not has_reservation:
             event.users.add(request.user)
             event.save()
-            event.charge(token, description, user)
+            description = "resereved "
+            event.charge(request.data['stripeToken'], description, request.user, tickets=request.data['tickets'])
             return Response({'not_permitted': 'action not permitted, you must make a payment.'},
                             status=status.HTTP_402_PAYMENT_REQUIRED)
         # return Response()
