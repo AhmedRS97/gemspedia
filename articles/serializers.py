@@ -21,7 +21,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Article
         fields = (
-            'user', 'title', 'description', 'slug', 'cover_img',  'videos', 'updated',
+            'user', 'title', 'description', 'slug', 'cover_img',  'videos', 'created', 'updated',
         )
         read_only_fields = ('created',)
 
