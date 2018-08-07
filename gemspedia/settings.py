@@ -204,13 +204,17 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Cairo'
 CELERY_BEAT_SCHEDULE = {
-    'task-number-one': {
+    'popular-articles': {
         'task': 'articles.tasks.task_cache_popular_articles',
-        'schedule': crontab(minute=2),
+        'schedule': crontab(minute='*/3'),
     },
-    'task-number-two': {
+    'popular-authors': {
         'task': 'articles.tasks.task_cache_popular_authors',
-        'schedule': crontab(minute=3),
+        'schedule': crontab(minute='*/3'),
+    },
+    'popular-events': {
+        'task': 'events.tasks.task_cache_popular_events',
+        'schedule': crontab(minute='*/3'),
     }
 }
 
@@ -223,3 +227,16 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     )
 }
+
+
+# DRF JWT settings
+import datetime
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=5),
+}
+
+
+# stripe settings
+STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_0bzkiDjuJPLrDw1DXTi94Ys4")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_fjvaNIQFPMEg5dydiH1nd7ts")

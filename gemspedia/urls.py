@@ -22,10 +22,10 @@ from .views import home_page, privacy
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home_page, name='homepage'),
-    url(r'^privacy$', privacy, name='privacy'),
-    url(r'^auth/', include('djoser.urls')),
+    # url(r'^privacy$', privacy, name='privacy'),
     url(r'^auth/', include('djoser.urls.jwt')),
-    # url(r'^api/', include('accounts.urls', namespace='account')),
+    url(r'^api/', include('djoser.urls.base', namespace='accounts')),
+    url(r'^api/', include('accounts.urls')),
     url(r'^api/', include('articles.urls', namespace='articles')),
     url(r'^api/', include('events.urls', namespace='events')),
     url(r'^api/', include('places.urls', namespace='places')),
