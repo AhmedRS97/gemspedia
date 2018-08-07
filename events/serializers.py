@@ -33,7 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             'users', 'title', 'description', 'price', 'start', 'end',
-            'limit', 'location', 'images', 'videos',
+            'limit', 'available_seats', 'location', 'images', 'videos', 'created',
         )
         read_only_fields = ('duration', 'price_in_cents')
 
