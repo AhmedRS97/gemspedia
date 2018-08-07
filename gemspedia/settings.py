@@ -233,7 +233,7 @@ REST_FRAMEWORK = {
 import datetime
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=5),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(weeks=1),
 }
 
 
