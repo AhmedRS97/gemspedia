@@ -23,6 +23,7 @@ class Event(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, db_index=True, blank=True, null=True)
     limit = models.PositiveIntegerField()
     available_seats = models.PositiveSmallIntegerField()
+    cover_img = models.ImageField(upload_to=get_file_path(file_dir='events-cover-imgs/'))
     created = models.DateTimeField(_('Time Created'), auto_now_add=True)  # add current date.
     # images = GenericRelation(Image, related_query_name='events')
     # videos = GenericRelation(Video, related_query_name='events')
@@ -53,7 +54,7 @@ class Event(models.Model):
         charges the user, add him to the event and create event reservation if the event have a price.
         :param token: Str
         :param description: Str
-        :param user: QuerySet object
+        :param user: User object
         :param currency: Str
         :param tickets: Integer
         :param capture: Boolean
@@ -68,9 +69,11 @@ class Event(models.Model):
                 reservation = self.reservations.create(
                     user=user, event=self, tickets=tickets, charge_id=charge['id'], paid=True
                 )
+                self.available_seats -= tickets
                 return reservation
             except stripe.error.CardError as e:
-                print('there was an error charging the user.')
+                print('there was an error charging the user.', e)
+                print('error == ', e is True)
                 return False
         else:
             try:
@@ -81,6 +84,7 @@ class Event(models.Model):
                 reservation = self.reservations.create(
                     user=user, event=self, tickets=tickets, charge_id=charge['id']
                 )
+                self.available_seats -= tickets
                 return reservation
             except stripe.error.CardError as e:
                 print('there was an error charging the user.')
