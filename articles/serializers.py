@@ -12,7 +12,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     user = UserSerializer(read_only=True)
     videos = VideoSerializer(many=True)

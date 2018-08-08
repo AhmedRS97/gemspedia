@@ -24,11 +24,14 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class EventSerializer(serializers.HyperlinkedModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    # users = serializers.HyperlinkedRelatedField(many=True, view_name='user-detail', queryset=User.objects.all())
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
+    # images = serializers.HyperlinkedRelatedField(many=True, view_name='', read_only=True)
+    # videos = serializers.HyperlinkedRelatedField(many=True, read_only=True)
     api_key = serializers.Field(source=settings.STRIPE_PUBLIC_KEY)
 
     class Meta:
@@ -37,7 +40,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
             'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
-            # 'url',
+            'url',
         )
         # extra_kwargs = {
         #     'url': {'view_name': 'event-detail', 'lookup_field': 'pk'},

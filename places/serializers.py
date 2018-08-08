@@ -20,7 +20,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class PlaceSerializer(serializers.HyperlinkedModelSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)

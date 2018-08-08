@@ -24,7 +24,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class TravelSerializer(serializers.HyperlinkedModelSerializer):
+class TravelSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     images = ImageSerializer(many=True)
