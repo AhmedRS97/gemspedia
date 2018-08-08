@@ -61,6 +61,7 @@ def get_file_path(file_dir: str):
     # extension = filename.split('.')[-1]
     # filename = "%s.%s" % (uuid.uuid4(), ext)
     # return join(file_dir, filename)
+    global give_path
 
     def give_path(instance, filename):
         return join(file_dir, "%s.%s" % (uuid.uuid4().int, filename.split('.')[-1]))
