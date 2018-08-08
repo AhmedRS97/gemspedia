@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'events',
     'places',
     'travels',
+    'payments',
     # 'multimedia', # this has a problem with DRF and django
     'django.contrib.admin',
     'django.contrib.auth',

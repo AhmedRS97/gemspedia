@@ -1,5 +1,5 @@
 from rest_framework import serializers
-# from accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer
 from accounts.models import User
 from .models import Event, EventImage, EventVideo
 
@@ -26,7 +26,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    users = UserSerializer(many=True)  # PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
     api_key = serializers.Field(source=settings.STRIPE_PUBLIC_KEY)
