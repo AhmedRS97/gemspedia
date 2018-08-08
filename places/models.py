@@ -12,6 +12,7 @@ class Place(models.Model):
     name = models.CharField(max_length=255)
     description = RichTextField(max_length=1024)
     location = models.CharField(max_length=255)
+    cover_img = models.ImageField(upload_to=get_file_path(file_dir='places-cover-imgs/'))
     created = models.DateTimeField(_('Time Created'), auto_now_add=True, editable=True)  # add current date.
     updated = models.DateTimeField(_('Time Updated'), auto_now=True, editable=True)  # update date.
     # images = GenericRelation(Image, related_query_name='places')

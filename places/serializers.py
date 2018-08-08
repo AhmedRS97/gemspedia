@@ -20,7 +20,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class PlaceSerializer(serializers.ModelSerializer):
+class PlaceSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
@@ -29,7 +29,7 @@ class PlaceSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Place
         fields = (
-            'name', 'description', 'location', 'images', 'videos',
+            'id', 'url', 'name', 'description', 'location', 'images', 'videos', 'cover_img'
         )
 
     def create(self, validated_data):
