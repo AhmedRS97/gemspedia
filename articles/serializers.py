@@ -12,7 +12,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     user = UserSerializer(read_only=True)
     videos = VideoSerializer(many=True)
@@ -21,9 +21,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Article
         fields = (
-            'user', 'title', 'description', 'slug', 'cover_img',  'videos', 'created', 'updated',
+            'id', 'url', 'title', 'description', 'slug', 'cover_img', 'user', 'videos', 'created', 'updated',
         )
-        read_only_fields = ('created',)
+        read_only_fields = ('id', 'created',)
 
     def create(self, validated_data):
         vids = validated_data.pop('videos')
