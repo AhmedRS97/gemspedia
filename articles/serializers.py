@@ -21,7 +21,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Article
         fields = (
-            'id', 'url', 'title', 'description', 'slug', 'cover_img', 'user', 'videos', 'created', 'updated',
+            'id', 'title', 'description', 'slug', 'cover_img', 'user', 'videos', 'created', 'updated',  # 'url',
         )
         read_only_fields = ('id', 'created',)
 

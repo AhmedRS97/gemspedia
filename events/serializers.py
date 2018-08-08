@@ -26,7 +26,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    users = UserSerializer(many=True)  # PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
     api_key = serializers.Field(source=settings.STRIPE_PUBLIC_KEY)
@@ -35,9 +35,14 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Event
         fields = (
-            'id', 'url', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats',
-            'location', 'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
+            'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
+            'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
+            # 'url',
         )
+        # extra_kwargs = {
+        #     'url': {'view_name': 'event-detail', 'lookup_field': 'pk'},
+        #     'users': {'view_name': 'user-detail', 'lookup_field': 'pk'}
+        # }
         read_only_fields = ('id', 'duration', 'price_in_cents', 'api_key')
 
     def create(self, validated_data):

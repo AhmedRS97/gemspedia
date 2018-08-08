@@ -29,7 +29,7 @@ class PlaceSerializer(serializers.HyperlinkedModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Place
         fields = (
-            'id', 'url', 'name', 'description', 'location', 'images', 'videos', 'cover_img'
+            'id', 'name', 'description', 'location', 'images', 'videos', 'cover_img',  # 'url',
         )
 
     def create(self, validated_data):
