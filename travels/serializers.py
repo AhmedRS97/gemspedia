@@ -35,8 +35,9 @@ class TravelSerializer(serializers.HyperlinkedModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Travel
         fields = (
-            'id', 'url', 'title', 'description', 'price', 'has_offer', 'offer', 'start', 'end', 'limit',
-            'users', 'location', 'duration', 'price_in_cents', 'images', 'videos', 'api_key',
+            'id', 'title', 'description', 'price', 'has_offer', 'offer', 'start', 'end', 'limit', 'users',
+            'location', 'duration', 'price_in_cents', 'images', 'videos', 'api_key',
+            # 'url',
         )
         read_only_fields = ('id', 'duration', 'price_in_cents', 'api_key')
 
