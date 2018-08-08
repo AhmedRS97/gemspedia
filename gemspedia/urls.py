@@ -21,7 +21,7 @@ from .views import home_page, privacy
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', home_page, name='homepage'),
+    # url(r'^$', home_page, name='homepage'),
     # url(r'^privacy$', privacy, name='privacy'),
     url(r'^auth/', include('djoser.urls.jwt')),
     url(r'^api/', include('djoser.urls.base', namespace='accounts')),
