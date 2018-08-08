@@ -41,18 +41,29 @@ class EventViewSet(viewsets.ModelViewSet):
     def join(self, request, pk=None):
         event = self.get_object()
         has_reservation = event.reservations.filter(user=request.user, event=event).exists()
+        tickets = int(request.data.get('tickets', 1))
         if not event.price and not has_reservation:
             event.users.add(request.user)
+            event.reservations.create(user=request.user, event=event, tickets=tickets)
+            event.available_seats -= tickets
             event.save()
-            event.reservations.create(user=request.user, event=event, tickets=request.data['tickets'])
             return Response({'status': 'user joined the event.'})
         elif event.price and not has_reservation:
-            event.users.add(request.user)
-            event.save()
-            description = "resereved "
-            event.charge(request.data['stripeToken'], description, request.user, tickets=request.data['tickets'])
-            return Response({'not_permitted': 'action not permitted, you must make a payment.'},
-                            status=status.HTTP_402_PAYMENT_REQUIRED)
+            description = "resereved {tickets} tickets for {request.user.username}"
+            charged = event.charge(request.data['stripeToken'], description, request.user, tickets=tickets)
+            if charged:
+                event.users.add(request.user)
+                event.available_seats -= tickets
+                event.save()
+                return Response({'status': 'user joined the event.'})
+            return Response(
+                {'status': 'error charging the user, please try again.'}, status=status.HTTP_400_BAD_REQUEST
+            )
+        elif has_reservation:
+            return Response({
+                'not_permitted': 'action not permitted, you already made a reservation.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'bad_request': 'there is unknown error happened.'}, status=status.HTTP_400_BAD_REQUEST)
         # return Response()
 
     # @action(methods=['post'], detail=True)
