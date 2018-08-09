@@ -43,7 +43,13 @@ class Event(models.Model):
 
     @property
     def price_in_cents(self):
-        return int(str(self.price).replace('.', ''))
+        if self.price:
+            return int(str(self.price).replace('.', ''))
+        pass
+    
+    @property
+    def api_key(self):
+        return settings.STRIPE_PUBLIC_KEY
 
     @classmethod
     def get_upcoming_events(cls, start, end):

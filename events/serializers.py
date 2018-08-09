@@ -34,7 +34,6 @@ class EventSerializer(serializers.ModelSerializer):
     videos = VideoSerializer(many=True)
     # images = serializers.HyperlinkedRelatedField(many=True, view_name='', read_only=True)
     # videos = serializers.HyperlinkedRelatedField(many=True, read_only=True)
-    api_key = serializers.ReadOnlyField(source=settings.STRIPE_PUBLIC_KEY)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
@@ -42,7 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
             'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
-            'url',
+            # 'url',
         )
         # extra_kwargs = {
         #     'url': {'view_name': 'event-detail', 'lookup_field': 'pk'},
