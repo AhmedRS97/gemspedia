@@ -24,7 +24,7 @@ class Travel(models.Model):
     start = models.DateTimeField(db_index=True)
     end = models.DateTimeField(db_index=True)
     limit = models.PositiveIntegerField()
-    available_seats = models.PositiveSmallIntegerField()
+    available_seats = models.PositiveSmallIntegerField(blank=True)
     cover_img = models.ImageField(upload_to=get_file_path(file_dir='travels-cover-imgs/'))
     location = models.ForeignKey(Place, related_name='travels')
     created = models.DateTimeField(_('Time Created'), auto_now_add=True)  # add current date.
@@ -49,6 +49,10 @@ class Travel(models.Model):
     @property
     def price_in_cents(self):
         return int(str(self.price - self.offer).replace('.', ''))
+
+    @property
+    def api_key(self):
+        return settings.STRIPE_PUBLIC_KEY
 
     @classmethod
     def get_upcoming_travels(cls, start, end):

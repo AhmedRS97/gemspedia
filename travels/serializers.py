@@ -29,7 +29,6 @@ class TravelSerializer(serializers.ModelSerializer):
     users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
-    api_key = serializers.Field(source=settings.STRIPE_PUBLIC_KEY)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
