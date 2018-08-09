@@ -41,7 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
-            'duration', 'price_in_cents', 'users', 'images', 'videos', 'created',
+            'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
             'url',
         )
         # extra_kwargs = {
