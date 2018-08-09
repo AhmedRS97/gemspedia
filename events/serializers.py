@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from accounts.serializers import UserSerializer
 from accounts.models import User
+from places.models import Place
 from .models import Event, EventImage, EventVideo
 
 from django.conf import settings
@@ -27,6 +28,7 @@ class VideoSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    location = serializers.PrimaryKeyRelatedField(many=False, queryset=Place.objects.all())
     # users = serializers.HyperlinkedRelatedField(many=True, view_name='user-detail', queryset=User.objects.all())
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
@@ -39,7 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
-            'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
+            'duration', 'price_in_cents', 'users', 'images', 'videos', 'created',
             'url',
         )
         # extra_kwargs = {

@@ -22,7 +22,7 @@ class Event(models.Model):
     end = models.DateTimeField(db_index=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, db_index=True, blank=True, null=True)
     limit = models.PositiveIntegerField()
-    available_seats = models.PositiveSmallIntegerField()
+    available_seats = models.PositiveSmallIntegerField(blank=True)
     cover_img = models.ImageField(upload_to=get_file_path(file_dir='events-cover-imgs/'))
     created = models.DateTimeField(_('Time Created'), auto_now_add=True)  # add current date.
     # images = GenericRelation(Image, related_query_name='events')
