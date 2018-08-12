@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Place, PlaceVideo, PlaceImage
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
     class Meta:
@@ -11,7 +11,7 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ('image',)
 
 
-class VideoSerializer(serializers.ModelSerializer):
+class VideoSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
     class Meta:
@@ -20,8 +20,9 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class PlaceSerializer(serializers.ModelSerializer):
+class PlaceSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
+    url = serializers.HyperlinkedIdentityField(view_name="places:place-detail")
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
 
@@ -29,7 +30,7 @@ class PlaceSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Place
         fields = (
-            'id', 'name', 'description', 'location', 'images', 'videos', 'cover_img',  # 'url',
+            'url', 'name', 'description', 'location', 'cover_img', 'images', 'videos',
         )
 
     def create(self, validated_data):
