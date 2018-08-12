@@ -1,12 +1,11 @@
 from rest_framework import serializers
-# from accounts.serializers import UserSerializer
 from .models import Travel, TravelImage, TravelVideo
 from accounts.models import User
 
-from django.conf import settings
+# from django.conf import settings
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
     class Meta:
@@ -15,7 +14,7 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ('image',)
 
 
-class VideoSerializer(serializers.ModelSerializer):
+class VideoSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
 
     class Meta:
@@ -24,9 +23,18 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
-class TravelSerializer(serializers.ModelSerializer):
+class TravelUserSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="accounts:user-detail")
+
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'first_name', 'last_name', 'biography', 'avatar',)
+
+
+class TravelSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    url = serializers.HyperlinkedIdentityField(view_name="travels:travel-detail")
+    users = TravelUserSerializer(many=True, read_only=True)
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
 
@@ -34,11 +42,10 @@ class TravelSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Travel
         fields = (
-            'id', 'title', 'description', 'price', 'has_offer', 'offer', 'start', 'end', 'limit', 'users',
-            'location', 'duration', 'price_in_cents', 'images', 'videos', 'api_key',
-            # 'url',
+            'url', 'title', 'description', 'price', 'has_offer', 'offer', 'start', 'end',
+            'limit', 'users', 'duration', 'price_in_cents', 'images', 'videos', 'api_key',
         )
-        read_only_fields = ('id', 'duration', 'price_in_cents', 'api_key')
+        read_only_fields = ('duration', 'price_in_cents', 'api_key')
 
     def create(self, validated_data):
         imgs = validated_data.pop('images')
