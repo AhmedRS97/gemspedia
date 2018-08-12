@@ -1,10 +1,9 @@
 from rest_framework import serializers
-from accounts.serializers import UserSerializer
 from accounts.models import User
 from places.models import Place
 from .models import Event, EventImage, EventVideo
 
-from django.conf import settings
+# from django.conf import settings
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -25,29 +24,38 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('video',)
 
 
+class EventUserSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="accounts:user-detail")
+
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'first_name', 'last_name', 'biography', 'avatar',)
+
+
+class EventPlaceSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="places:place-detail")
+
+    class Meta:
+        model = Place
+        fields = ('url', 'name', 'location')
+
+
 class EventSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
-    location = serializers.PrimaryKeyRelatedField(many=False, queryset=Place.objects.all())
-    # users = serializers.HyperlinkedRelatedField(many=True, view_name='user-detail', queryset=User.objects.all())
+    url = serializers.HyperlinkedIdentityField(view_name="events:event-detail")
+    users = EventUserSerializer(many=True)
+    location = EventPlaceSerializer(many=False)
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
-    # images = serializers.HyperlinkedRelatedField(many=True, view_name='', read_only=True)
-    # videos = serializers.HyperlinkedRelatedField(many=True, read_only=True)
 
     class Meta:
         """Meta class to map serializer's fields with the model fields."""
         model = Event
         fields = (
-            'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'location',
-            'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
-            # 'url',
+            'url', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'cover_img',
+            'location', 'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
         )
-        # extra_kwargs = {
-        #     'url': {'view_name': 'event-detail', 'lookup_field': 'pk'},
-        #     'users': {'view_name': 'user-detail', 'lookup_field': 'pk'}
-        # }
-        read_only_fields = ('id', 'duration', 'price_in_cents', 'api_key')
+        read_only_fields = ('duration', 'price_in_cents', 'api_key')
 
     def create(self, validated_data):
         imgs = validated_data.pop('images')

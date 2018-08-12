@@ -8,10 +8,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.core.cache import caches
 
-from .models import Event
+from .models import Event, EventImage, EventVideo
 # from accounts.models import User
 
-from .serializers import EventSerializer
+from .serializers import EventSerializer, ImageSerializer, VideoSerializer
 
 db_cache = caches['db']
 
@@ -66,13 +66,16 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response({'bad_request': 'there is unknown error happened.'}, status=status.HTTP_400_BAD_REQUEST)
         # return Response()
 
-    # @action(methods=['post'], detail=True)
-    # def pay(self, request, pk=None):
-    #     event = self.get_object()
-    #     if not event.price:
-    #         return Response({'not_permitted': "action not permitted, this event doesn't have a price."},
-    #                         status=status.HTTP_400_BAD_REQUEST)
-            
+
+class EventImageViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageSerializer
+    queryset = EventImage.objects.all()
+
+
+class EventVideoViewSet(viewsets.ModelViewSet):
+    serializer_class = VideoSerializer
+    queryset = EventVideo.objects.all()
+
 
 # class EventList(ListView):
 #     model = Event
