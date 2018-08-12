@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.core.cache import caches
 from rest_framework import viewsets  # , status
+from rest_framework import mixins
 
 from .models import User
 from .serializers import UserSerializer
@@ -10,7 +11,7 @@ from .serializers import UserSerializer
 db_cache = caches['db']
 
 
-class UserViewSet(viewsets.GenericViewSet):
+class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     A viewset for viewing and editing User instances.
     """
