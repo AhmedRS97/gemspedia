@@ -37,14 +37,14 @@ class EventPlaceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Place
-        fields = ('url', 'name', 'location')
+        fields = ('url', 'name', 'address')
 
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer to map the Model instance into JSON format."""
     url = serializers.HyperlinkedIdentityField(view_name="events:event-detail")
     users = EventUserSerializer(many=True)
-    location = EventPlaceSerializer(many=False)
+    # location = EventPlaceSerializer(many=False)
     images = ImageSerializer(many=True)
     videos = VideoSerializer(many=True)
 
