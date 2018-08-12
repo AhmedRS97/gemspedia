@@ -29,7 +29,7 @@ class EventUserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'first_name', 'last_name', 'biography', 'avatar',)
+        fields = ('url', 'id', 'username', 'first_name', 'last_name', 'biography', 'avatar',)
 
 
 class EventPlaceSerializer(serializers.HyperlinkedModelSerializer):
@@ -37,7 +37,7 @@ class EventPlaceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Place
-        fields = ('url', 'name', 'address')
+        fields = ('url', 'id', 'name', 'address')
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -52,7 +52,7 @@ class EventSerializer(serializers.ModelSerializer):
         """Meta class to map serializer's fields with the model fields."""
         model = Event
         fields = (
-            'url', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'cover_img',
+            'url', 'id', 'title', 'description', 'price', 'start', 'end', 'limit', 'available_seats', 'cover_img',
             'location', 'duration', 'api_key', 'price_in_cents', 'users', 'images', 'videos', 'created',
         )
         read_only_fields = ('duration', 'price_in_cents', 'api_key')
