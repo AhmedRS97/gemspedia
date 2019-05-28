@@ -26,7 +26,6 @@ class Travel(models.Model):
     limit = models.PositiveIntegerField()
     available_seats = models.PositiveSmallIntegerField(blank=True)
     cover_img = models.ImageField(upload_to=get_file_path(file_dir='travels-cover-imgs/'))
-    location = models.ForeignKey(Place, related_name='travels')
     created = models.DateTimeField(_('Time Created'), auto_now_add=True)  # add current date.
     # images = GenericRelation(Image, related_query_name='travels')
     # videos = GenericRelation(Video, related_query_name='travels')

@@ -13,7 +13,9 @@ class Place(models.Model):
     description = RichTextField(max_length=1024)
     address = models.CharField(max_length=255)
     cover_img = models.ImageField(upload_to=get_file_path(file_dir='places-cover-imgs/'))
-    created = models.DateTimeField(_('Time Created'), auto_now_add=True, editable=True)  # add current date.
+    # events = models.ForeignKey('events.Event', related_name='location', blank=True)
+    # travels = models.ForeignKey('travels.Travel', related_name='location', blank=True, null=True)
+    created = models.DateTimeField(_('Time Created'), auto_now_add=True, editable=True, null=True)  # add current date.
     updated = models.DateTimeField(_('Time Updated'), auto_now=True, editable=True)  # update date.
     # images = GenericRelation(Image, related_query_name='places')
     # videos = GenericRelation(Video, related_query_name='places')

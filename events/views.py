@@ -2,16 +2,16 @@
 # from django.urls import reverse_lazy
 # from django.shortcuts import get_object_or_404
 # from django.utils.decorators import method_decorator
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.core.cache import caches
 
 from .models import Event, EventImage, EventVideo
-# from accounts.models import User
 
-from .serializers import EventSerializer, ImageSerializer, VideoSerializer
+from .serializers import ReadEventSerializer, WriteEventSerializer, ImageSerializer, VideoSerializer
+# from rest_framework.serializers import PrimaryKeyRelatedField, HyperlinkedRelatedField
 
 db_cache = caches['db']
 
@@ -21,7 +21,7 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing Event instances.
     """
-    serializer_class = EventSerializer
+    serializer_class = ReadEventSerializer
     queryset = Event.objects.all()
 
     def get_permissions(self):
@@ -31,6 +31,17 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action not in ['retrieve', 'list', 'popular']:
             self.permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in self.permission_classes]
+
+    def get_serializer_class(self):
+        if self.request.method not in SAFE_METHODS:
+            self.serializer_class = WriteEventSerializer
+        return super(EventViewSet, self).get_serializer_class()
+
+    def get_serializer_context(self):
+        context = super(EventViewSet, self).get_serializer_context()
+        context['images'] = self.request.data.pop('images', [])
+        context['videos'] = self.request.data.pop('videos', [])
+        return context
 
     @action(methods=['get'], detail=False)
     def popular(self, request):
